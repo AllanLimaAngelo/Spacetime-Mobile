@@ -1,7 +1,7 @@
 import { ImageBackground } from 'react-native'
 import blurBg from '../src/assets/bg-blur.png'
 import { StatusBar } from 'expo-status-bar'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import * as SecureStore from 'expo-secure-store'
 
 import {
@@ -17,6 +17,7 @@ export default function Layout() {
   const [isUserAuthenticated, setIsUserAuthenticated] = useState<
     null | boolean
   >(null)
+
   const [hasLoadedFonts] = useFonts({
     Roboto_400Regular,
     Roboto_700Bold,
@@ -27,7 +28,7 @@ export default function Layout() {
     SecureStore.getItemAsync('token').then((token) => {
       setIsUserAuthenticated(!!token)
     })
-  })
+  }, [])
 
   if (!hasLoadedFonts) {
     return <SplashScreen />
@@ -45,11 +46,12 @@ export default function Layout() {
         screenOptions={{
           headerShown: false,
           contentStyle: { backgroundColor: 'transparent' },
+          animation: 'fade',
         }}
       >
         <Stack.Screen name="index" redirect={isUserAuthenticated} />
-        <Stack.Screen name="new" />
         <Stack.Screen name="memories" />
+        <Stack.Screen name="new" />
       </Stack>
     </ImageBackground>
   )
